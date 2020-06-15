@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jstu.serve.dao.mapper.TestMapper">
+
+    <select id="testSelect" resultType="java.util.Map">
+        select * from product
+    </select>
+
+    <select id="login" resultType="java.util.Map">
+        select emp_name,emp_authority,emp_position,emp_sex,emp_identify,emp_address,emp_tel,emp_store_add,emp_email
+        from employ where emp_name = #{username} and emp_password = #{password} and emp_position = #{position}
+    </select>
+
+    <update id="updateUser">
+        update employ
+        set emp_address = #{emp_address} ,emp_tel = #{emp_tel},emp_email = #{emp_email}
+        where emp_name = #{emp_name} and emp_position = #{emp_position}
+    </update>
+
+    <select id="getEmployeeAll" resultType="java.util.Map">
+        select emp_id,emp_name,emp_position,emp_sex,emp_identify,emp_address,emp_tel,emp_store_add,emp_email
+        from employ
+    </select>
+
+    <select id="getStoreAll" resultType="java.lang.String">
+        select distinct emp_store_add from employ
+    </select>
+
+    <select id="getSupplier" resultType="java.util.Map">
+        select * from supplier
+    </select>
+
+    <select id="getRecord" resultType="java.util.Map">
+        select * from records
+    </select>
+
+
+    <update id="updateRecord">
+        update records set re_state = #{re_state} where re_id = #{re_id}
+    </update>
+
+    <select id="getStore" resultType="java.util.Map">
+        select * from stores
+    </select>
+
+    <select id="getKindCount" resultType="java.lang.Integer">
+        select count(1) from supplier
+    </select>
+
+    <select id="getKind1" resultType="java.lang.Integer">
+        select count(1) from supplier where s_kind = '肉类'
+    </select>
+
+    <select id="getKind2" resultType="java.lang.Integer">
+        select count(1) from supplier where s_kind = '蔬菜类'
+    </select>
+
+    <select id="getKind3" resultType="java.lang.Integer">
+        select count(1) from supplier where s_kind = '海鲜类'
+    </select>
+
+    <select id="getKind4" resultType="java.lang.Integer">
+        select count(1) from supplier where s_kind = '调料类'
+    </select>
+
+    <select id="getKind5" resultType="java.lang.Integer">
+        select count(1) from supplier where s_kind = '水果类'
+    </select>
+
+    <select id="getStoreAddress" resultType="java.util.Map">
+        select store_address text,store_address value from stores
+    </select>
+
+    <insert id="addStore">
+        insert into stores
+        (store_leader,store_address,store_pn,store_benefit)
+        values
+        (#{store_leader},#{store_address},#{store_pn},#{store_benefit})
+    </insert>
+
+
+    <insert id="addEmployee">
+        insert into employ
+        (emp_name,emp_password,emp_position,emp_authority,emp_sex,emp_identify,emp_address,emp_tel,emp_store_add,emp_email)
+        values
+        (#{emp_name},#{emp_password},#{emp_position},#{emp_authority},#{emp_sex},#{emp_identify},#{emp_address},#{emp_tel},#{emp_store_add},#{emp_email})
+    </insert>
+
+    <insert id="addSupplier">
+        insert into supplier
+        (s_name,s_address,s_tel,s_kind)
+        values
+        (#{s_name},#{s_address},#{s_tel},#{s_kind})
+    </insert>
+
+    <update id="addPeopleCount">
+        update stores set store_pn = store_pn + 1 where store_address = #{emp_store_add}
+    </update>
+
+    <insert id="addApplication">
+        insert into application(app_name,app_identify,app_position,app_now,app_state)
+        values
+        (#{app_name},#{app_identify},#{app_position},#{app_now},#{app_state})
+    </insert>
+
+    <select id="getApplication" resultType="java.util.Map">
+        select * from application
+    </select>
+    
+    <update id="updateAppStatus">
+        update application set app_state = #{app_state}
+    </update>
+
+    <update id="updateEmployee1">
+        update employ set emp_position = '人事员工',emp_authority = 2 where emp_position = '人事经理'
+    </update>
+
+    <update id="updateEmployee2">
+        update employ set emp_position = '人事经理',emp_authority = 1 where emp_identify = #{app_identify}
+    </update>
+
+    <select id="getAppByIdentity" resultType="java.util.Map">
+        select * from application where app_identify = #{app_identify}
+    </select>
+</mapper>
