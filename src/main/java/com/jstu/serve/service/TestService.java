@@ -45,4 +45,8 @@ public interface TestService {
 
     Map<String,Object> getAppByIdentity(Map<String,Object> map);
 
+    Integer getGoodCount(int good_id);
+    Integer buyGood(int good_id);
+
+    List<Map<String,Object>> getAgeAnalysis();
 }

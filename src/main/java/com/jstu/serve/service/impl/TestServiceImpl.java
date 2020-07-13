@@ -5,10 +5,7 @@ import com.jstu.serve.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 呆居
@@ -131,6 +128,30 @@ public class TestServiceImpl implements TestService {
     @Override
     public Map<String, Object> getAppByIdentity(Map<String,Object> map) {
         return testMapper.getAppByIdentity(map);
+    }
+
+    @Override
+    public Integer getGoodCount(int good_id) {
+        return testMapper.getGoodCount(good_id);
+    }
+
+    @Override
+    public Integer buyGood(int good_id) {
+        return testMapper.buyGood(good_id);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAgeAnalysis() {
+        String[] ageCategories = {"22岁及以下","23-35岁","36-45岁","46-55岁","50岁以上"};
+        List<Map<String,Object>> resultList = new LinkedList<>();
+        Map<String,Object> resultMap = testMapper.getAgeAnalysis();
+        for(int i=0;i<resultMap.size();i++) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("ageCategory",ageCategories[i]);
+            map.put("personCount",resultMap.get("age"+(i+1)));
+            resultList.add(map);
+        }
+        return resultList;
     }
 
 
