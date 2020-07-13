@@ -55,9 +55,4 @@ public interface TestMapper {
 
     Map<String,Object> getAppByIdentity(Map<String,Object> map);
 
-    Integer getGoodCount(int good_id);
-    Integer buyGood(int good_id);
-
-
-    Map<String,Object> getAgeAnalysis();
  }
