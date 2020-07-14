@@ -1,26 +1,20 @@
 package com.jstu.serve.controller;
 
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.jstu.serve.cache.Good;
 import com.jstu.serve.service.TestService;
-import com.jstu.serve.util.AESUtil;
 import com.jstu.serve.util.FormatResult;
-import net.sf.json.util.JSONUtils;
-import org.apache.ibatis.reflection.ArrayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author 呆居
+ *功能描述
+ * @author dida
+ * @date 2020/7/13
+ * @param null
+ * @return
  */
 @RestController
 public class TestController {
@@ -63,12 +57,7 @@ public class TestController {
 
     @RequestMapping("getSupplier")
     public FormatResult getSupplier() {
-        List<Map<String,Object>> list = testService.getSupplier();
-        JSONArray jsonArray = new JSONArray(Collections.singletonList(list));
-        String originString = jsonArray.toJSONString();
-        String aesString = AESUtil.encrypt(originString);
-        String finalString = AESUtil.decrypt(aesString);
-        return FormatResult.ok(originString);
+        return FormatResult.ok(testService.getSupplier());
     }
 
     @RequestMapping("getRecord")
@@ -117,7 +106,7 @@ public class TestController {
     }
 
     @RequestMapping("addApplication")
-    public FormatResult addApplication(@RequestBody Map<String, Object> map) {
+    public FormatResult addApplication(@RequestBody Map<String,Object> map) {
         testService.addApplication(map);
         return FormatResult.ok();
 
@@ -129,43 +118,13 @@ public class TestController {
     }
 
     @RequestMapping("handleApplication")
-    public FormatResult handleApplication(@RequestBody Map<String, Object> map) {
+    public FormatResult handleApplication(@RequestBody Map<String,Object> map){
         testService.handleApplication(map);
         return FormatResult.ok();
     }
 
     @RequestMapping("getAppByIdentity")
-    public FormatResult getAppByIdentity(@RequestBody Map<String, Object> map) {
+    public FormatResult getAppByIdentity(@RequestBody Map<String,Object> map) {
         return FormatResult.ok(testService.getAppByIdentity(map));
-    }
-
-
-    @RequestMapping("buyOneGood")
-    public FormatResult BuyGood() {
-        ReentrantLock lock = new ReentrantLock();
-        ExecutorService executorService = new ThreadPoolExecutor(50, 50, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
-        for (int i = 0; i < 50; i++) {
-            executorService.execute(() -> {
-//                synchronized (this) {
-                lock.lock();
-                int count = testService.getGoodCount(1);
-                if (count > 0) {
-                    testService.buyGood(1);
-                }
-//                }
-                lock.unlock();
-            });
-        }
-        return null;
-    }
-
-    @RequestMapping("getGoodCount")
-    public Integer getGoodCount() {
-        return Good.GoodCount;
-    }
-
-    @RequestMapping("getAgeAnalysis")
-    public FormatResult getAgeAnalysis() {
-        return FormatResult.ok(testService.getAgeAnalysis());
     }
 }
